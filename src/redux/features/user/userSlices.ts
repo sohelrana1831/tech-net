@@ -1,5 +1,5 @@
 import { auth } from '@/lib/firebase';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -11,7 +11,7 @@ interface ICredential {
 }
 // Define a type for the slice state
 interface IUser {
-  user: {
+  users: {
     email: string | null;
   };
   isLodging: boolean;
@@ -21,7 +21,7 @@ interface IUser {
 
 // Define the initial state using that type
 const initialState: IUser = {
-  user: {
+  users: {
     email: null,
   },
   isLodging: false,
@@ -50,10 +50,10 @@ export const usersSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, action) => {
-      state.user.email = action.payload;
+    setUser: (state, action: PayloadAction<string | null>) => {
+      state.users.email = action.payload;
     },
-    setLodging: (state, action) => {
+    setLodging: (state, action: PayloadAction<boolean>) => {
       state.isLodging = action.payload;
     },
   },
@@ -63,10 +63,10 @@ export const usersSlice = createSlice({
         (state.isLodging = true), (state.isError = false), (state.error = null);
       })
       .addCase(createUser.fulfilled, (state, action) => {
-        (state.user.email = action.payload), (state.isLodging = false);
+        (state.users.email = action.payload), (state.isLodging = false);
       })
       .addCase(createUser.rejected, (state, action) => {
-        (state.user.email = null),
+        (state.users.email = null),
           (state.isError = false),
           (state.error = action.error.message!);
       })
@@ -74,10 +74,10 @@ export const usersSlice = createSlice({
         (state.isLodging = true), (state.isError = false), (state.error = null);
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        (state.user.email = action.payload), (state.isLodging = false);
+        (state.users.email = action.payload), (state.isLodging = false);
       })
       .addCase(loginUser.rejected, (state, action) => {
-        (state.user.email = null),
+        (state.users.email = null),
           (state.isError = false),
           (state.error = action.error.message!);
       });

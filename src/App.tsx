@@ -12,7 +12,7 @@ function App() {
     dispatch(setLodging(true));
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        dispatch(setUser(user.email));
+        dispatch(setUser(user.email!));
         dispatch(setLodging(false));
       } else {
         dispatch(setLodging(false));
